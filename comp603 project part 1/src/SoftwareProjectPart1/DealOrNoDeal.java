@@ -9,6 +9,6 @@ public class DealOrNoDeal
     }
 }
 
-//Todo: Possibly make another class for printing cases and money values
-//      Fix money output so it is in order from lowest to hightest value
-//      Also fixes problem of not being in line with case numbers (so you cant tell case cash)
+//Todo: Make a GUI implementation thereby removing some of the classes or altering them
+//      Connect a database of some kind to this program
+//      add a validation to this program (do last)
