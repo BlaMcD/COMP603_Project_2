@@ -4,15 +4,9 @@ import java.util.InputMismatchException;
 
 public class Player 
 {
-    public Case chosenCase;
-    private ConsoleUserInterface userInterface;
+    public Case chosenCase;    
     
-    public Player()
-    {
-        userInterface = new ConsoleUserInterface();
-    }
-    
-    public Case chooseCase(CaseSet caseSet) 
+    /*public Case chooseCase(CaseSet caseSet) 
     {
         Case selectedCase = null;
 
@@ -20,7 +14,6 @@ public class Player
         {
             try 
             {
-                int caseNum = userInterface.promptForCase();
                 selectedCase = findCase(caseNum, caseSet.getCases());
                 if (selectedCase == null) 
                 {
@@ -41,9 +34,9 @@ public class Player
         }
 
         return selectedCase;
-    }
+    }*/
     
-    private Case findCase(int caseNumber, Case[] cases)
+    public Case findCase(int caseNumber, Case[] cases)
     {
         for(int i=0; i<cases.length; i++)
         {
@@ -55,11 +48,11 @@ public class Player
         return null;
     }
     
-    public boolean decideDeal(int offer) 
+    /*public boolean decideDeal(int offer) 
     {
         System.out.println("Banker's offer: $"+offer);
         String response = userInterface.promptForDeal();
         return response.equals("y");
-    }
+    }*/
     
 }

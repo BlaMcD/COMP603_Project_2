@@ -6,4 +6,5 @@ public class Case extends AbstractCase
     {
         super(caseNumber, money);
     }
+    
 }

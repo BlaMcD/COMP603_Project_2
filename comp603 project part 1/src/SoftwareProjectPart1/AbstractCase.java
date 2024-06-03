@@ -1,9 +1,8 @@
 package SoftwareProjectPart1;
 
 public abstract class AbstractCase {
-    
-    protected final int caseNumber;
-    protected final int money;
+    protected int caseNumber;
+    protected int money;
 
     public AbstractCase(int caseNumber, int money) 
     {
@@ -25,6 +24,6 @@ public abstract class AbstractCase {
     {
         System.out.println("\nCase number " + caseNumber + " had..... $" + money);
     }
-
 }
+
 

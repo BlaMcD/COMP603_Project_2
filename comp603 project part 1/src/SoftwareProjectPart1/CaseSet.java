@@ -12,7 +12,6 @@ public class CaseSet
     public Case firstChosenCase;
     public Integer[] moneyValues;
     public Integer[] caseNumbers;
-    public PrintCase printCase;
     public int numOfCases = 26;
     
     public CaseSet()
@@ -24,8 +23,6 @@ public class CaseSet
         this.cases = new Case[26];
         initialiseCases();
         this.originalCases = Arrays.copyOf(cases, cases.length);
-        
-        this.printCase = new PrintCase();
     }
     
     public Case[] getCases()
@@ -68,9 +65,5 @@ public class CaseSet
         }
     }
     
-    public void displayCases() 
-    {
-        printCase.outputCases(cases, originalCases, moneyValues, firstChosenCase);
-    }
 
 }
