@@ -4,13 +4,10 @@ public class Player
 {
     public Case chosenCase;    
     
-    public Case findCase(int caseNumber, Case[] cases)
-    {
-        for(int i=0; i<cases.length; i++)
-        {
-            if(cases[i] != null && cases[i].getCaseNumber() == caseNumber)
-            {
-                return cases[i];
+    public Case findCase(int caseIndex, Case[] cases) {
+        for (Case c : cases) {
+            if (c != null && c.getCaseNumber() == caseIndex) {
+                return c;
             }
         }
         return null;

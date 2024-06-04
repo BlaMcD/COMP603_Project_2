@@ -4,9 +4,12 @@ public class DealOrNoDeal
 {
     public static void main(String[] args)
     {
-        Game game = new Game();
-        game.startGame();
-        System.out.println("Hello");
+        DatabaseConnection.setupDatabase();
+         
+         GameFrame gameFrame = new GameFrame(new Game());
+         gameFrame.showLoginScreen();
+         Game game = new Game();
+        
     }
 }
 

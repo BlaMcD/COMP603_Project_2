@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class GameFrame extends JFrame {
     private JPanel chosenCasePanel;
@@ -13,10 +14,13 @@ public class GameFrame extends JFrame {
     private MoneyPanel moneyPanel;
     private BankerPanel bankerPanel;
     private Game currentGame;
+    private UserDAO userDAO = new UserDAO();
+    private ScoresDAO scoresDAO = new ScoresDAO();
 
-    public GameFrame(Game currentGame) 
-    {
-        this.currentGame = currentGame;
+    public GameFrame(Game currentGame) {
+        
+        DatabaseConnection.setupDatabase();
+       this.currentGame = currentGame;
 
         setTitle("DEAL OR NO DEAL");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -137,5 +141,63 @@ public class GameFrame extends JFrame {
             currentGame.rejectDeal();
             currentGame.isDealing = false;
         }
+    }
+
+
+    // Add login and leaderboard methods
+    public void showLoginScreen() {
+        JFrame loginFrame = new JFrame("Login");
+        loginFrame.setSize(400, 300);
+        loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        loginFrame.setLayout(new GridLayout(3, 2));
+
+        JLabel userLabel = new JLabel("Username:");
+        JTextField userField = new JTextField();
+        JLabel passLabel = new JLabel("Password:");
+        JPasswordField passField = new JPasswordField();
+        JButton loginButton = new JButton("Login");
+        JButton registerButton = new JButton("Register");
+
+        loginFrame.add(userLabel);
+        loginFrame.add(userField);
+        loginFrame.add(passLabel);
+        loginFrame.add(passField);
+        loginFrame.add(loginButton);
+        loginFrame.add(registerButton);
+
+        loginFrame.setVisible(true);
+
+        loginButton.addActionListener(e -> {
+            String username = userField.getText();
+            String password = new String(passField.getPassword());
+            if (userDAO.loginUser(username, password)) {
+                JOptionPane.showMessageDialog(loginFrame, "Login successful!");
+                loginFrame.dispose();
+                showLeaderboard();
+            } else {
+                JOptionPane.showMessageDialog(loginFrame, "Invalid login credentials.");
+            }
+        });
+
+        registerButton.addActionListener(e -> {
+            String username = userField.getText();
+            String password = new String(passField.getPassword());
+            userDAO.registerUser(username, password, null);
+            JOptionPane.showMessageDialog(loginFrame, "Registration successful!");
+        });
+    }
+
+    public void showLeaderboard() {
+        JFrame leaderboardFrame = new JFrame("Leaderboard");
+        leaderboardFrame.setSize(400, 300);
+        leaderboardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JTextArea leaderboardArea = new JTextArea();
+        leaderboardArea.setEditable(false);
+        List<String> topPlayers = scoresDAO.getTopPlayers();
+        for (String player : topPlayers) {
+            leaderboardArea.append(player + "\n");
+        }
+        leaderboardFrame.getContentPane().add(new JScrollPane(leaderboardArea));
+        leaderboardFrame.setVisible(true);
     }
 }
