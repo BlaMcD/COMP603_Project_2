@@ -8,7 +8,9 @@ public class Game {
     public Player player;
     public boolean gameOver;
     public GameFrame gameFrame;
-    public int eliminateCases = 6;
+    public boolean isDealing;
+    public int eliminateCases;
+    public int startEliminateCases;
 
     public Game()
     {
@@ -16,6 +18,9 @@ public class Game {
         this.banker = new Banker();
         this.player = new Player();
         this.gameOver = false;
+        this.isDealing = false;
+        this.startEliminateCases = 6;
+        this.eliminateCases = startEliminateCases;
     }
 
     public void startGame()
@@ -50,11 +55,7 @@ public class Game {
             playRound();
             if (eliminateCases == 0) 
             {
-                int offer = banker.makeOffer(caseSet.cases, player.chosenCase);
-                gameFrame.updateBankerOffer(offer);
-                gameFrame.enableDealButtons();
-                gameFrame.setPrompt("Do you want to take the offer?");
-                eliminateCases = (caseSet.numOfCases > 6) ? 6 : caseSet.numOfCases - 1;
+                handleDeal();
                 if(caseSet.numOfCases == 1)
                 {
                     finalRound();
@@ -63,6 +64,15 @@ public class Game {
         }
     }
 
+    public void handleDeal()
+    {
+        this.isDealing = true;
+        int offer = banker.makeOffer(caseSet.cases, player.chosenCase);
+        gameFrame.updateBankerOffer(offer);
+        gameFrame.enableDealButtons();
+        gameFrame.setPrompt("Do you want to take the offer?");  
+    }
+    
     public void acceptDeal(int offer) 
     {
         gameOver = true;
@@ -73,22 +83,22 @@ public class Game {
     public void rejectDeal() 
     {
         gameFrame.disableDealButtons();
-        eliminateCases--;
+        startEliminateCases = (startEliminateCases > 1) ? (startEliminateCases-1) : 1;
+        eliminateCases = startEliminateCases;
         playRound();
     }
 
     public void finalRound()
     {
-        //gameFrame.setPrompt("Choose your final case.");
         gameOver = true;
         SwingUtilities.invokeLater(() -> {
             gameFrame.dispose();
             Case lastCase = null;
-            for (Case c : caseSet.cases) 
+            for (Case currentCase : caseSet.cases) 
             {
-                if (c != null) 
+                if (currentCase != null) 
                 {
-                    lastCase = c;
+                    lastCase = currentCase;
                     break;
                 }
             }

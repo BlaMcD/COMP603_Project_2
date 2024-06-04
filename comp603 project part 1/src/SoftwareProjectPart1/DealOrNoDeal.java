@@ -9,7 +9,6 @@ public class DealOrNoDeal
     }
 }
 
-//TODO: Fix the elimiate cases, should go 6, 5, 4, 3, 2, 1 and keep going 1 until only two cases remain
 //      Fix the issue where it does not correctly go to the final frame
 //      Add a beginning frame which appears at the start of the program
 //      Add additional features to improve GUI clearness

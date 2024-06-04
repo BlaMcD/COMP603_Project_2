@@ -110,9 +110,12 @@ public class GameFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            JButton button = (JButton) e.getSource();
-            int caseIndex = Integer.parseInt(button.getText());
-            currentGame.caseChosen(caseIndex);
+            if(!currentGame.isDealing)
+            {
+                JButton button = (JButton) e.getSource();
+                int caseIndex = Integer.parseInt(button.getText());
+                currentGame.caseChosen(caseIndex);
+            }
         }
     }
 
@@ -132,6 +135,7 @@ public class GameFrame extends JFrame {
         public void actionPerformed(ActionEvent e) 
         {
             currentGame.rejectDeal();
+            currentGame.isDealing = false;
         }
     }
 }
