@@ -6,6 +6,7 @@ public class DealOrNoDeal
     {
         Game game = new Game();
         game.startGame();
+        System.out.println("Hello");
     }
 }
 
