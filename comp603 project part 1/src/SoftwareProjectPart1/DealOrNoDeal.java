@@ -9,22 +9,12 @@ public class DealOrNoDeal {
         UserDAO userDAO = new UserDAO();
         ScoresDAO scoresDAO = new ScoresDAO();
 
-        // Create a single instance of the Game and pass the DAOs to it
-        Game game = new Game(userDAO, scoresDAO);
-        
-        // Create the GameFrame and pass the game instance to it
-        GameFrame gameFrame = new GameFrame(game, userDAO, scoresDAO);
-        
-        // Link the GameFrame to the Game instance
-        game.setGameFrame(gameFrame);
-
-        // Start the game
-        game.startGame();
-        
-        // Optionally, show the login screen
-        gameFrame.showLoginScreen();
+        // Create the login frame and show it
+        LoginFrame loginFrame = new LoginFrame(userDAO, scoresDAO);
+        loginFrame.setVisible(true);
     }
 }
+
 
 
 //      Fix the issue where it does not correctly go to the final frame

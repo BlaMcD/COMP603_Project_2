@@ -16,19 +16,23 @@ public class GameFrame extends JFrame {
     private Game currentGame;
     private UserDAO userDAO;
     private ScoresDAO scoresDAO;
+    private LoginFrame loginFrame;
 
     public GameFrame(Game currentGame) {
         this.currentGame = currentGame;
         initialize();
     }
 
-    public GameFrame(Game currentGame, UserDAO userDAO, ScoresDAO scoresDAO) {
+    public GameFrame(Game currentGame, UserDAO userDAO, ScoresDAO scoresDAO, LoginFrame loginFrame) {
         DatabaseConnection.setupDatabase();
         this.currentGame = currentGame;
         this.userDAO = userDAO;
         this.scoresDAO = scoresDAO;
+        this.loginFrame = loginFrame;
         initialize();
     }
+
+
 
     private void initialize() {
         setTitle("DEAL OR NO DEAL");
@@ -112,6 +116,10 @@ public class GameFrame extends JFrame {
     private class CaseButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (!loginFrame.isLoggedIn()) {
+                JOptionPane.showMessageDialog(GameFrame.this, "Please log in first!");
+                return;
+            }
             if (!currentGame.isDealing) {
                 JButton button = (JButton) e.getSource();
                 int caseIndex = Integer.parseInt(button.getText());
@@ -123,6 +131,10 @@ public class GameFrame extends JFrame {
     private class DealButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (!loginFrame.isLoggedIn()) {
+                JOptionPane.showMessageDialog(GameFrame.this, "Please log in first!");
+                return;
+            }
             int offer = bankerPanel.getCurrentOffer();
             currentGame.acceptDeal(offer);
         }
@@ -131,51 +143,13 @@ public class GameFrame extends JFrame {
     private class NoDealButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (!loginFrame.isLoggedIn()) {
+                JOptionPane.showMessageDialog(GameFrame.this, "Please log in first!");
+                return;
+            }
             currentGame.rejectDeal();
             currentGame.isDealing = false;
         }
-    }
-
-    public void showLoginScreen() {
-        JFrame loginFrame = new JFrame("Login");
-        loginFrame.setSize(400, 300);
-        loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        loginFrame.setLayout(new GridLayout(3, 2));
-
-        JLabel userLabel = new JLabel("Username:");
-        JTextField userField = new JTextField();
-        JLabel passLabel = new JLabel("Password:");
-        JPasswordField passField = new JPasswordField();
-        JButton loginButton = new JButton("Login");
-        JButton registerButton = new JButton("Register");
-
-        loginFrame.add(userLabel);
-        loginFrame.add(userField);
-        loginFrame.add(passLabel);
-        loginFrame.add(passField);
-        loginFrame.add(loginButton);
-        loginFrame.add(registerButton);
-
-        loginFrame.setVisible(true);
-
-        loginButton.addActionListener(e -> {
-            String username = userField.getText();
-            String password = new String(passField.getPassword());
-            if (userDAO.loginUser(username, password)) {
-                JOptionPane.showMessageDialog(loginFrame, "Login successful!");
-                loginFrame.dispose();
-                showLeaderboard();
-            } else {
-                JOptionPane.showMessageDialog(loginFrame, "Invalid login credentials.");
-            }
-        });
-
-        registerButton.addActionListener(e -> {
-            String username = userField.getText();
-            String password = new String(passField.getPassword());
-            userDAO.registerUser(username, password, null);
-            JOptionPane.showMessageDialog(loginFrame, "Registration successful!");
-        });
     }
 
     public void showLeaderboard() {
