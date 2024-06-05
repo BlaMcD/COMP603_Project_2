@@ -64,6 +64,7 @@ public class LoginFrame extends JFrame {
         game.setGameFrame(gameFrame);
         game.startGame();
         gameFrame.setVisible(true);
+        gameFrame.showLeaderboard();
     }
 
     public boolean isLoggedIn() {
