@@ -1,17 +1,28 @@
 package SoftwareProjectPart1;
 
-public class DealOrNoDeal 
-{
-    public static void main(String[] args)
-    {
+public class DealOrNoDeal {
+    public static void main(String[] args) {
+        // Set up the database
         DatabaseConnection.setupDatabase();
-         
-         GameFrame gameFrame = new GameFrame(new Game());
-         gameFrame.showLoginScreen();
-         Game game = new Game();
+
+        // Create a single instance of the Game
+        Game game = new Game();
         
+        // Create the GameFrame and pass the game instance to it
+        GameFrame gameFrame = new GameFrame(game);
+        
+        // Link the GameFrame to the Game instance
+        game.setGameFrame(gameFrame);
+
+        // Start the game
+        game.startGame();
+        
+        // Optionally, show the login screen
+        gameFrame.showLoginScreen();
     }
 }
+
+
 
 //      Fix the issue where it does not correctly go to the final frame
 //      Add a beginning frame which appears at the start of the program

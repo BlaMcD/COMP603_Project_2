@@ -25,13 +25,18 @@ public class UserDAO {
     }
 
     public boolean loginUser(String username, String password) {
-        String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
+        String sql = "SELECT id FROM Users WHERE username = ? AND password = ?";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+            if (rs.next()) {
+                int userId = rs.getInt("id");
+                // Save userId for later use
+                Player.setUserId(userId);  // Assuming Player class has a static method to set the userId
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

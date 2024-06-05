@@ -4,23 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class GameFrame extends JFrame {
-    private JPanel chosenCasePanel;
-    private JLabel chosenCaseLabel;
+    public JPanel chosenCasePanel;
+    public JLabel chosenCaseLabel;
     private JLabel promptLabel;
     private CasePanel casePanel;
     private MoneyPanel moneyPanel;
     private BankerPanel bankerPanel;
     private Game currentGame;
-    private UserDAO userDAO = new UserDAO();
-    private ScoresDAO scoresDAO = new ScoresDAO();
 
     public GameFrame(Game currentGame) {
-        
         DatabaseConnection.setupDatabase();
-       this.currentGame = currentGame;
+        this.currentGame = currentGame;
 
         setTitle("DEAL OR NO DEAL");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,58 +60,46 @@ public class GameFrame extends JFrame {
         setVisible(true);
     }
 
-    public void setPrompt(String prompt) 
-    {
+    public void setPrompt(String prompt) {
         promptLabel.setText(prompt);
     }
 
-    public void setChosenCaseLabel(int caseNumber) 
-    {
+    public void setChosenCaseLabel(int caseNumber) {
         chosenCaseLabel.setText("Your Case: " + caseNumber);
     }
 
-    public void updateMoneyLabel(int moneyValue)
-    {
+    public void updateMoneyLabel(int moneyValue) {
         moneyPanel.markOffMoney(moneyValue);
     }
 
-    public void disableCaseButton(int index)
-    {
+    public void disableCaseButton(int index) {
         casePanel.disableButton(index);
     }
 
-    public void updateBankerOffer(int offer) 
-    {
+    public void updateBankerOffer(int offer) {
         bankerPanel.updateOfferLabel(offer);
     }
 
-    public void enableDealButtons() 
-    {
+    public void enableDealButtons() {
         bankerPanel.enableButtons();
     }
-    
-    public void disableAllCaseButtons() 
-    {
+
+    public void disableAllCaseButtons() {
         casePanel.disableAllButtons();
     }
 
-    public void enableAllCaseButtons() 
-    {
+    public void enableAllCaseButtons() {
         casePanel.enableAllButtons();
     }
 
-    public void disableDealButtons() 
-    {
+    public void disableDealButtons() {
         bankerPanel.disableButtons();
     }
 
-    private class CaseButtonListener implements ActionListener 
-    {
+    private class CaseButtonListener implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(!currentGame.isDealing)
-            {
+        public void actionPerformed(ActionEvent e) {
+            if (!currentGame.isDealing) {
                 JButton button = (JButton) e.getSource();
                 int caseIndex = Integer.parseInt(button.getText());
                 currentGame.caseChosen(caseIndex);
@@ -123,28 +107,22 @@ public class GameFrame extends JFrame {
         }
     }
 
-    private class DealButtonListener implements ActionListener 
-    {
+    private class DealButtonListener implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) 
-        {
+        public void actionPerformed(ActionEvent e) {
             int offer = bankerPanel.getCurrentOffer();
             currentGame.acceptDeal(offer);
         }
     }
 
-    private class NoDealButtonListener implements ActionListener 
-    {
+    private class NoDealButtonListener implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) 
-        {
+        public void actionPerformed(ActionEvent e) {
             currentGame.rejectDeal();
             currentGame.isDealing = false;
         }
     }
 
-
-    // Add login and leaderboard methods
     public void showLoginScreen() {
         JFrame loginFrame = new JFrame("Login");
         loginFrame.setSize(400, 300);
@@ -170,10 +148,10 @@ public class GameFrame extends JFrame {
         loginButton.addActionListener(e -> {
             String username = userField.getText();
             String password = new String(passField.getPassword());
-            if (userDAO.loginUser(username, password)) {
+            if (new UserDAO().loginUser(username, password)) {
                 JOptionPane.showMessageDialog(loginFrame, "Login successful!");
                 loginFrame.dispose();
-                showLeaderboard();
+                // Call any method if you want to display something after login
             } else {
                 JOptionPane.showMessageDialog(loginFrame, "Invalid login credentials.");
             }
@@ -182,22 +160,8 @@ public class GameFrame extends JFrame {
         registerButton.addActionListener(e -> {
             String username = userField.getText();
             String password = new String(passField.getPassword());
-            userDAO.registerUser(username, password, null);
+            new UserDAO().registerUser(username, password, null);
             JOptionPane.showMessageDialog(loginFrame, "Registration successful!");
         });
-    }
-
-    public void showLeaderboard() {
-        JFrame leaderboardFrame = new JFrame("Leaderboard");
-        leaderboardFrame.setSize(400, 300);
-        leaderboardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        JTextArea leaderboardArea = new JTextArea();
-        leaderboardArea.setEditable(false);
-        List<String> topPlayers = scoresDAO.getTopPlayers();
-        for (String player : topPlayers) {
-            leaderboardArea.append(player + "\n");
-        }
-        leaderboardFrame.getContentPane().add(new JScrollPane(leaderboardArea));
-        leaderboardFrame.setVisible(true);
     }
 }

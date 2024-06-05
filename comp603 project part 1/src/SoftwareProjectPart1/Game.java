@@ -11,8 +11,8 @@ public class Game {
     public boolean isDealing;
     public int eliminateCases;
     public int startEliminateCases;
-    private String variableName;
 
+    // Default constructor
     public Game() {
         this.caseSet = new CaseSet();
         this.banker = new Banker();
@@ -21,36 +21,50 @@ public class Game {
         this.isDealing = false;
         this.startEliminateCases = 6;
         this.eliminateCases = startEliminateCases;
-        
+    }
+
+    public void setGameFrame(GameFrame gameFrame) {
+        this.gameFrame = gameFrame;
     }
 
     public void startGame() {
-        gameFrame = new GameFrame(this);
+        // Ensure gameFrame is properly initialized before starting the game
+        if (gameFrame == null) {
+            gameFrame = new GameFrame(this);
+        }
+        playRound();
     }
 
     public void playRound() {
-        gameFrame.setPrompt("Choose " + eliminateCases + " cases to eliminate");
+        if (gameFrame != null) {
+            gameFrame.setPrompt("Choose " + eliminateCases + " cases to eliminate");
+        }
     }
 
     public void caseChosen(int caseIndex) {
-       
-
         Case currentCase = player.findCase(caseIndex, caseSet.cases);
+
+        if (currentCase == null) {
+            return;
+        }
 
         if (player.chosenCase == null) {
             player.chosenCase = currentCase;
             caseSet.removeCase(caseIndex);
-            System.out.println("variableName: " + variableName);
 
-            gameFrame.setChosenCaseLabel(player.chosenCase.getCaseNumber());
-            gameFrame.disableCaseButton(caseIndex - 1);
-            gameFrame.setPrompt("Now choose " + eliminateCases + " cases to eliminate");
+            if (gameFrame != null) {
+                gameFrame.setChosenCaseLabel(player.chosenCase.getCaseNumber());
+                gameFrame.disableCaseButton(caseIndex - 1);
+                gameFrame.setPrompt("Now choose " + eliminateCases + " cases to eliminate");
+            }
         } else {
             currentCase.open();
-            
+
             caseSet.removeCase(caseIndex);
-            gameFrame.updateMoneyLabel(currentCase.getMoney());
-            gameFrame.disableCaseButton(caseIndex - 1);
+            if (gameFrame != null) {
+                gameFrame.updateMoneyLabel(currentCase.getMoney());
+                gameFrame.disableCaseButton(caseIndex - 1);
+            }
             eliminateCases--;
             playRound();
             if (eliminateCases == 0) {
@@ -65,9 +79,11 @@ public class Game {
     public void handleDeal() {
         this.isDealing = true;
         int offer = banker.makeOffer(caseSet.cases, player.chosenCase);
-        gameFrame.updateBankerOffer(offer);
-        gameFrame.enableDealButtons();
-        gameFrame.setPrompt("Do you want to take the offer?");
+        if (gameFrame != null) {
+            gameFrame.updateBankerOffer(offer);
+            gameFrame.enableDealButtons();
+            gameFrame.setPrompt("Do you want to take the offer?");
+        }
     }
 
     public void acceptDeal(int offer) {
@@ -77,7 +93,9 @@ public class Game {
     }
 
     public void rejectDeal() {
-        gameFrame.disableDealButtons();
+        if (gameFrame != null) {
+            gameFrame.disableDealButtons();
+        }
         startEliminateCases = (startEliminateCases > 1) ? (startEliminateCases - 1) : 1;
         eliminateCases = startEliminateCases;
         playRound();
@@ -86,7 +104,9 @@ public class Game {
     public void finalRound() {
         gameOver = true;
         SwingUtilities.invokeLater(() -> {
-            gameFrame.dispose();
+            if (gameFrame != null) {
+                gameFrame.dispose();
+            }
             Case lastCase = null;
             for (Case currentCase : caseSet.cases) {
                 if (currentCase != null) {

@@ -1,12 +1,22 @@
 package SoftwareProjectPart1;
 
-public class Player 
-{
-    public Case chosenCase;    
-    
-    public Case findCase(int caseIndex, Case[] cases) {
+public class Player {
+
+    private static int userId;
+    public Case chosenCase;
+    int id;
+
+   public static void setUserId(int id) {
+        userId = id;
+    }
+
+    public static int getUserId() {
+        return userId;
+    }
+
+    public Case findCase(int caseNumber, Case[] cases) {
         for (Case c : cases) {
-            if (c != null && c.getCaseNumber() == caseIndex) {
+            if (c != null && c.getCaseNumber() == caseNumber) {
                 return c;
             }
         }
