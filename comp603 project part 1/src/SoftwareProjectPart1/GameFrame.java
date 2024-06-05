@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class GameFrame extends JFrame {
     public JPanel chosenCasePanel;
@@ -13,11 +14,23 @@ public class GameFrame extends JFrame {
     private MoneyPanel moneyPanel;
     private BankerPanel bankerPanel;
     private Game currentGame;
+    private UserDAO userDAO;
+    private ScoresDAO scoresDAO;
 
     public GameFrame(Game currentGame) {
+        this.currentGame = currentGame;
+        initialize();
+    }
+
+    public GameFrame(Game currentGame, UserDAO userDAO, ScoresDAO scoresDAO) {
         DatabaseConnection.setupDatabase();
         this.currentGame = currentGame;
+        this.userDAO = userDAO;
+        this.scoresDAO = scoresDAO;
+        initialize();
+    }
 
+    private void initialize() {
         setTitle("DEAL OR NO DEAL");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
@@ -148,10 +161,10 @@ public class GameFrame extends JFrame {
         loginButton.addActionListener(e -> {
             String username = userField.getText();
             String password = new String(passField.getPassword());
-            if (new UserDAO().loginUser(username, password)) {
+            if (userDAO.loginUser(username, password)) {
                 JOptionPane.showMessageDialog(loginFrame, "Login successful!");
                 loginFrame.dispose();
-                // Call any method if you want to display something after login
+                showLeaderboard();
             } else {
                 JOptionPane.showMessageDialog(loginFrame, "Invalid login credentials.");
             }
@@ -160,8 +173,22 @@ public class GameFrame extends JFrame {
         registerButton.addActionListener(e -> {
             String username = userField.getText();
             String password = new String(passField.getPassword());
-            new UserDAO().registerUser(username, password, null);
+            userDAO.registerUser(username, password, null);
             JOptionPane.showMessageDialog(loginFrame, "Registration successful!");
         });
+    }
+
+    public void showLeaderboard() {
+        JFrame leaderboardFrame = new JFrame("Leaderboard");
+        leaderboardFrame.setSize(400, 300);
+        leaderboardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JTextArea leaderboardArea = new JTextArea();
+        leaderboardArea.setEditable(false);
+        List<String> topPlayers = scoresDAO.getTopPlayers();
+        for (String player : topPlayers) {
+            leaderboardArea.append(player + "\n");
+        }
+        leaderboardFrame.getContentPane().add(new JScrollPane(leaderboardArea));
+        leaderboardFrame.setVisible(true);
     }
 }

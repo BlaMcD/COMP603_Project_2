@@ -11,9 +11,10 @@ public class Game {
     public boolean isDealing;
     public int eliminateCases;
     public int startEliminateCases;
+    private ScoresDAO scoresDAO;
 
-    // Default constructor
-    public Game() {
+    // Constructor to accept DAOs
+    public Game(UserDAO userDAO, ScoresDAO scoresDAO) {
         this.caseSet = new CaseSet();
         this.banker = new Banker();
         this.player = new Player();
@@ -21,8 +22,10 @@ public class Game {
         this.isDealing = false;
         this.startEliminateCases = 6;
         this.eliminateCases = startEliminateCases;
+        this.scoresDAO = scoresDAO;
     }
 
+    // Method to set the GameFrame instance
     public void setGameFrame(GameFrame gameFrame) {
         this.gameFrame = gameFrame;
     }
@@ -88,6 +91,7 @@ public class Game {
 
     public void acceptDeal(int offer) {
         gameOver = true;
+        scoresDAO.recordScore(Player.getUserId(), offer);
         JOptionPane.showMessageDialog(gameFrame, "Congratulations! You have accepted the offer and won $" + offer);
         System.exit(0);
     }
@@ -115,6 +119,8 @@ public class Game {
                 }
             }
             if (lastCase != null) {
+                int finalScore = lastCase.getMoney();
+                scoresDAO.recordScore(Player.getUserId(), finalScore);
                 FinalFrame finalFrame = new FinalFrame(player.chosenCase, lastCase);
                 finalFrame.setVisible(true);
             }

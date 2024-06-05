@@ -5,11 +5,15 @@ public class DealOrNoDeal {
         // Set up the database
         DatabaseConnection.setupDatabase();
 
-        // Create a single instance of the Game
-        Game game = new Game();
+        // Create instances of DAOs
+        UserDAO userDAO = new UserDAO();
+        ScoresDAO scoresDAO = new ScoresDAO();
+
+        // Create a single instance of the Game and pass the DAOs to it
+        Game game = new Game(userDAO, scoresDAO);
         
         // Create the GameFrame and pass the game instance to it
-        GameFrame gameFrame = new GameFrame(game);
+        GameFrame gameFrame = new GameFrame(game, userDAO, scoresDAO);
         
         // Link the GameFrame to the Game instance
         game.setGameFrame(gameFrame);
@@ -21,7 +25,6 @@ public class DealOrNoDeal {
         gameFrame.showLoginScreen();
     }
 }
-
 
 
 //      Fix the issue where it does not correctly go to the final frame
