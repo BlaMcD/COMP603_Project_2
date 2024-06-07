@@ -1,13 +1,21 @@
 package SoftwareProjectPart1;
 
-public class DealOrNoDeal 
-{
-    public static void main(String[] args)
-    {
-        Game game = new Game();
-        game.startGame();
+public class DealOrNoDeal {
+    public static void main(String[] args) {
+        // Set up the database
+        DatabaseConnection.setupDatabase();
+
+        // Create instances of DAOs
+        UserDAO userDAO = new UserDAO();
+        ScoresDAO scoresDAO = new ScoresDAO();
+
+        // Create the login frame and show it
+        LoginFrame loginFrame = new LoginFrame(userDAO, scoresDAO);
+        loginFrame.setVisible(true);
     }
 }
+
+
 
 //      Fix the issue where it does not correctly go to the final frame
 //      Add a beginning frame which appears at the start of the program
