@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class MoneyPanel extends JPanel {
     
-    private JLabel[] moneyLabels;
-    private Map<Integer, JLabel> moneyLabelMap;
+    public JLabel[] moneyLabels;
+    public Map<Integer, JLabel> moneyLabelMap;
 
     public MoneyPanel(Integer[] moneyValues)
     {
@@ -20,12 +20,17 @@ public class MoneyPanel extends JPanel {
 
         for (int i = 0; i < moneyValues.length; i++) 
         {
-            moneyLabels[i] = new JLabel("$" + moneyValues[i]);
-            moneyLabels[i].setFont(new Font("Arial", Font.BOLD, 16));
-            moneyLabels[i].setForeground(Color.WHITE);
-            add(moneyLabels[i]);
-            moneyLabelMap.put(moneyValues[i], moneyLabels[i]);
+            setMoneyValues(moneyValues, i);
         }
+    }
+    
+    private void setMoneyValues(Integer[] moneyValues, int i)
+    {
+        moneyLabels[i] = new JLabel("$" + moneyValues[i]);
+        moneyLabels[i].setFont(new Font("Arial", Font.BOLD, 16));
+        moneyLabels[i].setForeground(Color.WHITE);
+        add(moneyLabels[i]);
+        moneyLabelMap.put(moneyValues[i], moneyLabels[i]);    
     }
 
     public void markOffMoney(int moneyValue) 
