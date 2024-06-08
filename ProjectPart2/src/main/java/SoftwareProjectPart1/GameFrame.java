@@ -1,11 +1,9 @@
-package SoftwareProjectPart1;
 
+package SoftwareProjectPart1;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class GameFrame extends JFrame {
     public JPanel chosenCasePanel;
@@ -18,6 +16,7 @@ public class GameFrame extends JFrame {
     private UserDAO userDAO;
     private ScoresDAO scoresDAO;
     private LoginFrame loginFrame;
+    private JButton restartButton;
 
     public GameFrame(Game currentGame) {
         this.currentGame = currentGame;
@@ -70,6 +69,12 @@ public class GameFrame extends JFrame {
         promptLabel.setFont(new Font("Arial", Font.BOLD, 18));
         promptLabel.setForeground(Color.BLACK);
         chosenCasePanel.add(promptLabel, BorderLayout.CENTER);
+
+        // Restart button
+        restartButton = new JButton("Restart Game");
+        restartButton.setFont(new Font("Arial", Font.BOLD, 16));
+        restartButton.addActionListener(new RestartButtonListener());
+        chosenCasePanel.add(restartButton, BorderLayout.EAST);
 
         add(chosenCasePanel, BorderLayout.SOUTH);
 
@@ -151,39 +156,23 @@ public class GameFrame extends JFrame {
         }
     }
 
-    public void showLeaderboard() {
-        JFrame leaderboardFrame = new JFrame("Leaderboard");
-        leaderboardFrame.setSize(600, 400);
-        leaderboardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        leaderboardFrame.setLayout(new BorderLayout());
-
-        JLabel titleLabel = new JLabel("Leaderboard", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        leaderboardFrame.add(titleLabel, BorderLayout.NORTH);
-
-        String[] columnNames = {"Rank", "Player"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-        List<String> topPlayers = scoresDAO.getTopPlayers();
-        int rank = 1;
-        for (String player : topPlayers) {
-            String[] parts = player.split(" - ", 2);
-            String username = parts.length > 0 ? parts[0] : "Unknown";
-            String score = parts.length > 1 ? parts[1] : "0";
-            model.addRow(new Object[]{rank, username, score});
-            rank++;
+    private class RestartButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dispose();
+            SwingUtilities.invokeLater(() -> {
+                Game newGame = new Game(userDAO, scoresDAO);
+                GameFrame newGameFrame = new GameFrame(newGame, userDAO, scoresDAO, loginFrame);
+                newGame.setGameFrame(newGameFrame);
+                newGame.startGame();
+            });
         }
+    }
 
-        JTable leaderboardTable = new JTable(model);
-        leaderboardTable.setFillsViewportHeight(true);
-        leaderboardTable.setEnabled(false);
-        leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 16));
-        leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-
-        JScrollPane scrollPane = new JScrollPane(leaderboardTable);
-        leaderboardFrame.add(scrollPane, BorderLayout.CENTER);
-
-        leaderboardFrame.setVisible(true);
+    public void showLeaderboard() {
+        SwingUtilities.invokeLater(() -> {
+            LeaderboardFrame leaderboardFrame = new LeaderboardFrame(scoresDAO);
+            leaderboardFrame.setVisible(true);
+        });
     }
 }
