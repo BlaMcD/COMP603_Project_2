@@ -70,6 +70,13 @@ public class GameFrame extends JFrame {
         promptLabel.setFont(new Font("Arial", Font.BOLD, 18));
         promptLabel.setForeground(Color.BLACK);
         chosenCasePanel.add(promptLabel, BorderLayout.CENTER);
+        
+        //restart button
+        JButton restartButton = new JButton("Restart Game");
+        restartButton.setFont(new Font("Arial", Font.BOLD, 16));
+        restartButton.addActionListener(new RestartButtonListener());
+        chosenCasePanel.add(restartButton, BorderLayout.EAST);
+
 
         add(chosenCasePanel, BorderLayout.SOUTH);
 
@@ -151,6 +158,19 @@ public class GameFrame extends JFrame {
         }
     }
 
+    private class RestartButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dispose();
+            SwingUtilities.invokeLater(() -> {
+                Game newGame = new Game(userDAO, scoresDAO);
+                GameFrame newGameFrame = new GameFrame(newGame, userDAO, scoresDAO, loginFrame);
+                newGame.setGameFrame(newGameFrame);
+                newGame.startGame();
+            });
+        }
+    }
+    
     public void showLeaderboard() {
         JFrame leaderboardFrame = new JFrame("Leaderboard");
         leaderboardFrame.setSize(600, 400);
