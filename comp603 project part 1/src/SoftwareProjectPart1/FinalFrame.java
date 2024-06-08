@@ -12,7 +12,8 @@ public class FinalFrame extends JFrame {
     private JButton chosenCaseButton;
     private JButton lastCaseButton;
 
-    public FinalFrame(Case chosenCase, Case lastCase) {
+    public FinalFrame(Case chosenCase, Case lastCase) 
+    {
         this.chosenCase = chosenCase;
         this.lastCase = lastCase;
 
@@ -81,12 +82,14 @@ public class FinalFrame extends JFrame {
     private class CaseButtonListener implements ActionListener {
         private int money;
 
-        public CaseButtonListener(int money) {
+        public CaseButtonListener(int money) 
+        {
             this.money = money;
         }
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) 
+        {
             JOptionPane.showMessageDialog(FinalFrame.this, "Congratulations! You have won $" + money);
             dispose();
         }
