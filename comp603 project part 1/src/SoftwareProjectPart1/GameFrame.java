@@ -1,6 +1,7 @@
 package SoftwareProjectPart1;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,8 +32,6 @@ public class GameFrame extends JFrame {
         this.loginFrame = loginFrame;
         initialize();
     }
-
-
 
     private void initialize() {
         setTitle("DEAL OR NO DEAL");
@@ -154,17 +153,37 @@ public class GameFrame extends JFrame {
 
     public void showLeaderboard() {
         JFrame leaderboardFrame = new JFrame("Leaderboard");
-        leaderboardFrame.setSize(400, 300);
+        leaderboardFrame.setSize(600, 400);
         leaderboardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        JTextArea leaderboardArea = new JTextArea();
-        leaderboardArea.setEditable(false);
+        leaderboardFrame.setLayout(new BorderLayout());
+
+        JLabel titleLabel = new JLabel("Leaderboard", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        leaderboardFrame.add(titleLabel, BorderLayout.NORTH);
+
+        String[] columnNames = {"Rank", "Player"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
         List<String> topPlayers = scoresDAO.getTopPlayers();
-        int place = 1;
+        int rank = 1;
         for (String player : topPlayers) {
-            leaderboardArea.append(place + ". " + player + "\n");
-            place++;
+            String[] parts = player.split(" - ", 2);
+            String username = parts.length > 0 ? parts[0] : "Unknown";
+            String score = parts.length > 1 ? parts[1] : "0";
+            model.addRow(new Object[]{rank, username, score});
+            rank++;
         }
-        leaderboardFrame.getContentPane().add(new JScrollPane(leaderboardArea));
+
+        JTable leaderboardTable = new JTable(model);
+        leaderboardTable.setFillsViewportHeight(true);
+        leaderboardTable.setEnabled(false);
+        leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 16));
+        leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+
+        JScrollPane scrollPane = new JScrollPane(leaderboardTable);
+        leaderboardFrame.add(scrollPane, BorderLayout.CENTER);
+
         leaderboardFrame.setVisible(true);
     }
 }
