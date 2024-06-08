@@ -2,8 +2,6 @@ package SoftwareProjectPart1;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame {
     private UserDAO userDAO;
@@ -53,7 +51,7 @@ public class LoginFrame extends JFrame {
         registerButton.addActionListener(e -> {
             String username = userField.getText();
             String password = new String(passField.getPassword());
-             if (userDAO.isUsernameTaken(username)) {
+            if (userDAO.isUsernameTaken(username)) {
                 JOptionPane.showMessageDialog(this, "You have registered this account.");
             } else {
                 userDAO.registerUser(username, password, null);
