@@ -159,8 +159,10 @@ public class GameFrame extends JFrame {
         JTextArea leaderboardArea = new JTextArea();
         leaderboardArea.setEditable(false);
         List<String> topPlayers = scoresDAO.getTopPlayers();
+        int place = 1;
         for (String player : topPlayers) {
-            leaderboardArea.append(player + "\n");
+            leaderboardArea.append(place + ". " + player + "\n");
+            place++;
         }
         leaderboardFrame.getContentPane().add(new JScrollPane(leaderboardArea));
         leaderboardFrame.setVisible(true);

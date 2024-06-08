@@ -53,8 +53,12 @@ public class LoginFrame extends JFrame {
         registerButton.addActionListener(e -> {
             String username = userField.getText();
             String password = new String(passField.getPassword());
-            userDAO.registerUser(username, password, null);
-            JOptionPane.showMessageDialog(this, "Registration successful!");
+             if (userDAO.isUsernameTaken(username)) {
+                JOptionPane.showMessageDialog(this, "You have registered this account.");
+            } else {
+                userDAO.registerUser(username, password, null);
+                JOptionPane.showMessageDialog(this, "Registration successful!");
+            }
         });
     }
 

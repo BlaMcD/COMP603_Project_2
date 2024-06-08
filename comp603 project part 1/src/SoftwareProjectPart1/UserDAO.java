@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class UserDAO {
     public void registerUser(String username, String password, String email) {
@@ -19,6 +20,7 @@ public class UserDAO {
             pstmt.setString(2, password);
             pstmt.setString(3, email);
             pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Registration successful!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,7 +45,7 @@ public class UserDAO {
         return false;
     }
 
-    private boolean isUsernameTaken(String username) {
+    boolean isUsernameTaken(String username) {
         String sql = "SELECT * FROM Users WHERE username = ?";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
