@@ -16,19 +16,32 @@ public class BankerPanel extends JPanel {
         setLayout(new GridLayout(4, 1, 10, 10));
         setBackground(Color.BLACK);
 
+        initializeOfferLabel();
+        initializeDealButton(dealButtonListener);
+        initializeNoDealButton(noDealButtonListener);
+    }
+    
+    private void initializeOfferLabel()
+    {
         offerLabel = new JLabel("Banker's Offer: $0", SwingConstants.CENTER);
         offerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         offerLabel.setForeground(Color.WHITE);
-        add(offerLabel);
-
+        add(offerLabel);   
+    }
+    
+    private void initializeDealButton(ActionListener dealButtonListener)
+    {
         dealButton = new JButton("Deal");
         dealButton.setFont(new Font("Arial", Font.BOLD, 16));
         dealButton.setBackground(Color.GREEN);
         dealButton.setForeground(Color.BLACK);
         dealButton.setEnabled(false);
         dealButton.addActionListener(dealButtonListener);
-        add(dealButton);
-
+        add(dealButton);    
+    }
+    
+    private void initializeNoDealButton(ActionListener noDealButtonListener)
+    {
         noDealButton = new JButton("No Deal");
         noDealButton.setFont(new Font("Arial", Font.BOLD, 16));
         noDealButton.setBackground(Color.RED);
