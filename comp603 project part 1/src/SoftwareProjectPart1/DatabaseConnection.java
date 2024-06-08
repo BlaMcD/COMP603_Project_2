@@ -14,6 +14,7 @@ public class DatabaseConnection {
         try {
             // Load the Derby JDBC driver
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            System.out.println("Derby JDBC driver loaded successfully.");//debug statement
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -27,7 +28,7 @@ public class DatabaseConnection {
 
     public static void setupDatabase() {
         try (Connection conn = getConnection(); 
-             Statement stmt = conn.createStatement()) {
+            Statement stmt = conn.createStatement()) {
             
             System.out.println("Setting up the database...");
 
