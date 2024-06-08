@@ -12,7 +12,8 @@ public class CaseSet {
     public Integer[] caseNumbers;
     public int numOfCases = 26;
 
-    public CaseSet() {
+    public CaseSet() 
+    {
         ArrayInitializer initializer = new ArrayInitializer();
         this.moneyValues = initializer.loadMoneyValues("money_values.txt");
         this.caseNumbers = initializer.loadCaseNumbers("case_numbers.txt");
@@ -30,7 +31,8 @@ public class CaseSet {
         return this.originalCases;
     }
 
-    public final void initialiseCases() {
+    public final void initialiseCases() 
+    {
         List<Integer> caseList = Arrays.asList(caseNumbers);
         Collections.shuffle(caseList); // shuffle randomly resorts list
         Integer[] shuffledCases = caseList.toArray(new Integer[0]); // back to Integer array so we can initialise cases
@@ -44,7 +46,9 @@ public class CaseSet {
         }
     }
 
-    public void removeCase(int removeCaseNum) {
+    public void removeCase(int removeCaseNum) 
+    {
+        //find and remove case from the case array
         for (int i = 0; i < cases.length; i++) {
             if (cases[i] != null && cases[i].getCaseNumber() == removeCaseNum) {
                 cases[i] = null;
@@ -54,7 +58,8 @@ public class CaseSet {
         }
     }
 
-    public Case getCase(int index) {
+    public Case getCase(int index) 
+    {
         if (index > 0 && index <= cases.length) {
             return cases[index - 1];
         } else {

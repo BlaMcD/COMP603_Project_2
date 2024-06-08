@@ -12,20 +12,27 @@ public class CasePanel extends JPanel {
         setLayout(new GridLayout(5, 5, 10, 10));
         setBackground(Color.DARK_GRAY);
 
-        caseButtons = new JButton[26];
+        caseButtons = new JButton[26];//Array of all cases
         for (int i = 0; i < caseButtons.length; i++) 
         {
-            caseButtons[i] = new JButton(String.valueOf(i + 1));
-            caseButtons[i].setFont(new Font("Arial", Font.BOLD, 16));
-            caseButtons[i].setBackground(Color.ORANGE);
-            caseButtons[i].setForeground(Color.BLACK);
-            caseButtons[i].addActionListener(caseButtonListener);
-            add(caseButtons[i]);
+            setCase(caseButtonListener, i);//call method to set case button
         }
+    }
+    
+    private void setCase(ActionListener caseButtonListener, int index)
+    {
+        //initialises the current case
+        caseButtons[index] = new JButton(String.valueOf(index + 1));
+        caseButtons[index].setFont(new Font("Arial", Font.BOLD, 16));
+        caseButtons[index].setBackground(Color.ORANGE);
+        caseButtons[index].setForeground(Color.BLACK);
+        caseButtons[index].addActionListener(caseButtonListener);
+        add(caseButtons[index]);
     }
 
     public void disableButton(int index) 
     {
+        //disable case button when it has been pressed
         caseButtons[index].setEnabled(false);
     }
     
