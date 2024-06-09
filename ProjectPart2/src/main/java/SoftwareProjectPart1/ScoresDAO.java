@@ -3,22 +3,25 @@ package SoftwareProjectPart1;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScoresDAO {
     public void recordScore(int userId, int score) {
         String sql = "INSERT INTO Scores (user_id, score) VALUES (?, ?)";
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setInt(1, userId);
             pstmt.setInt(2, score);
             pstmt.executeUpdate();
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
     public List<String> getTopPlayers() {
         List<String> topPlayers = new ArrayList<>();
         String sql = "SELECT u.username, s.score FROM Scores s JOIN Users u ON s.user_id = u.id ORDER BY s.score DESC FETCH FIRST 10 ROWS ONLY";
@@ -32,5 +35,19 @@ public class ScoresDAO {
             e.printStackTrace();
         }
         return topPlayers;
+    }
+
+    public int getScore(String userId) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT score FROM Scores WHERE user_id = ?")) {
+            stmt.setString(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("score");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }
