@@ -1,14 +1,11 @@
-
 package SoftwareProjectPart1;
-
-
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class LeaderboardFrame extends JFrame {
+public class LeaderboardFrame extends JFrame implements FrameInitializer{
     private ScoresDAO scoresDAO;
 
     public LeaderboardFrame(ScoresDAO scoresDAO) {
@@ -17,10 +14,7 @@ public class LeaderboardFrame extends JFrame {
     }
 
     private void initialize() {
-        setTitle("Leaderboard");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
+        initializeFrame();
 
         JLabel titleLabel = new JLabel("Leaderboard", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -29,7 +23,25 @@ public class LeaderboardFrame extends JFrame {
 
         String[] columnNames = {"Rank", "Player"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        handleTopPlayers(model);
 
+        JScrollPane scrollPane = new JScrollPane(initializeTable(model));
+        add(scrollPane, BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+    
+    @Override
+    public void initializeFrame()
+    {
+        setTitle("Leaderboard");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+    }
+    
+    private void handleTopPlayers(DefaultTableModel model)
+    {
         List<String> topPlayers = scoresDAO.getTopPlayers();
         int rank = 1;
         for (String player : topPlayers) {
@@ -39,16 +51,15 @@ public class LeaderboardFrame extends JFrame {
             model.addRow(new Object[]{rank, username, score});
             rank++;
         }
-
+    }
+    
+    private JTable initializeTable(DefaultTableModel model)
+    {
         JTable leaderboardTable = new JTable(model);
         leaderboardTable.setFillsViewportHeight(true);
         leaderboardTable.setEnabled(false);
         leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 16));
         leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-
-        JScrollPane scrollPane = new JScrollPane(leaderboardTable);
-        add(scrollPane, BorderLayout.CENTER);
-
-        setVisible(true);
+        return leaderboardTable;
     }
 }

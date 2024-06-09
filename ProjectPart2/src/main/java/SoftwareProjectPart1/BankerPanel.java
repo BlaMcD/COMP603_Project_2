@@ -16,6 +16,7 @@ public class BankerPanel extends JPanel {
         setLayout(new GridLayout(4, 1, 10, 10));
         setBackground(Color.BLACK);
 
+        //initializes all labels and buttons with corresponding listeners
         initializeOfferLabel();
         initializeDealButton(dealButtonListener);
         initializeNoDealButton(noDealButtonListener);
@@ -31,6 +32,7 @@ public class BankerPanel extends JPanel {
     
     private void initializeDealButton(ActionListener dealButtonListener)
     {
+        //initialize the deal button with action listener
         dealButton = new JButton("Deal");
         dealButton.setFont(new Font("Arial", Font.BOLD, 16));
         dealButton.setBackground(Color.GREEN);
@@ -42,6 +44,7 @@ public class BankerPanel extends JPanel {
     
     private void initializeNoDealButton(ActionListener noDealButtonListener)
     {
+        //initialize no deal button with action listener
         noDealButton = new JButton("No Deal");
         noDealButton.setFont(new Font("Arial", Font.BOLD, 16));
         noDealButton.setBackground(Color.RED);
@@ -59,12 +62,14 @@ public class BankerPanel extends JPanel {
 
     public void enableButtons() 
     {
+        //enable deal or no deal buttons when deal taking place
         dealButton.setEnabled(true);
         noDealButton.setEnabled(true);
     }
 
     public void disableButtons()
     {
+        //disable buttons when player is eliminating cases
         dealButton.setEnabled(false);
         noDealButton.setEnabled(false);
     }

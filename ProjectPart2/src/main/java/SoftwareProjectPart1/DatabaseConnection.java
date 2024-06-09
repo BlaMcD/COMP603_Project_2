@@ -10,6 +10,7 @@ import java.sql.Statement;
 public class DatabaseConnection {
     private static final String DB_URL = "jdbc:derby:gameDatabase;create=true";
 
+    //got this static code from chatGPT
     static {
         try {
             // Load the Derby JDBC driver
@@ -24,8 +25,10 @@ public class DatabaseConnection {
         System.out.println("Database connection established.");
         return conn;
     }
-
+    
+    //had some help from chatGPT when making this method, not entire method
     public static void setupDatabase() {
+        //embedded database set up (if not already set up previously)
         try (Connection conn = getConnection(); 
              Statement stmt = conn.createStatement()) {
             
@@ -59,6 +62,7 @@ public class DatabaseConnection {
     }
 
     private static boolean tableExists(Connection conn, String tableName) throws SQLException {
+        //making sure the table does not already exist
         DatabaseMetaData meta = conn.getMetaData();
         try (ResultSet rs = meta.getTables(null, null, tableName.toUpperCase(), null)) {
             return rs.next();

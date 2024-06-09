@@ -20,6 +20,7 @@ public class ArrayInitializer {
 
     private Integer[] loadValuesFromFile(String filePath) 
     {
+        //method to load the values from the txt files and return them to the caseSet class
         List<Integer> values = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) 
         {
