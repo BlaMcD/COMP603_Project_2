@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.border.EmptyBorder;
 
-public class FinalFrame extends JFrame {
+public class FinalFrame extends JFrame implements FrameInitializer{
     private Case chosenCase;
     private Case lastCase;
     private JButton chosenCaseButton;
@@ -14,24 +14,8 @@ public class FinalFrame extends JFrame {
 
     public FinalFrame(Case chosenCase, Case lastCase) 
     {
-        this.chosenCase = chosenCase;
-        this.lastCase = lastCase;
-
-        setTitle("Final Round");
-        setSize(600, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Set background color of content pane to black
-        getContentPane().setBackground(Color.BLACK);
-        setLayout(new BorderLayout());
-
-        // Create the label with padding
-        JLabel instructionLabel = new JLabel("CHOOSE YOUR FINAL CASE", JLabel.CENTER);
-        instructionLabel.setFont(new Font("Arial", Font.BOLD, 36));
-        instructionLabel.setForeground(Color.ORANGE); // Set text color to orange for visibility
-        instructionLabel.setBorder(new EmptyBorder(20, 0, 20, 0)); // Add padding
-
-        add(instructionLabel, BorderLayout.NORTH);
+        initializeFrame();
+        initializeLabel();
 
         // Create a panel for the buttons
         JPanel buttonPanel = new JPanel();
@@ -41,26 +25,17 @@ public class FinalFrame extends JFrame {
         // Initialize buttons
         chosenCaseButton = new JButton("Your case: " + chosenCase.getCaseNumber());
         lastCaseButton = new JButton("Last case: " + lastCase.getCaseNumber());
+        configureButton(chosenCaseButton, chosenCase.getCaseNumber());
+        configureButton(lastCaseButton, lastCase.getCaseNumber());
+        
+        createConstraints(buttonPanel);
 
-        // Set button properties
-        chosenCaseButton.setBackground(Color.ORANGE);
-        chosenCaseButton.setForeground(Color.BLACK);
-        chosenCaseButton.setHorizontalAlignment(SwingConstants.CENTER); // Center text horizontally
-        chosenCaseButton.setVerticalAlignment(SwingConstants.CENTER); // Center text vertically
-        lastCaseButton.setBackground(Color.ORANGE);
-        lastCaseButton.setForeground(Color.BLACK);
-        lastCaseButton.setHorizontalAlignment(SwingConstants.CENTER); // Center text horizontally
-        lastCaseButton.setVerticalAlignment(SwingConstants.CENTER); // Center text vertically
-
-        // Set preferred size for buttons
-        Dimension buttonSize = new Dimension(200, 100);
-        chosenCaseButton.setPreferredSize(buttonSize);
-        lastCaseButton.setPreferredSize(buttonSize);
-
-        // Add action listeners to buttons
-        chosenCaseButton.addActionListener(new CaseButtonListener(chosenCase.getMoney()));
-        lastCaseButton.addActionListener(new CaseButtonListener(lastCase.getMoney()));
-
+        // Add the button panel to the center of the frame
+        add(buttonPanel, BorderLayout.CENTER);
+    }
+    
+    private void createConstraints(JPanel buttonPanel)
+    {
         // Add buttons to the panel with constraints
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 50, 10, 50); // Add padding between buttons
@@ -74,9 +49,37 @@ public class FinalFrame extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 0;
         buttonPanel.add(lastCaseButton, gbc);
-
-        // Add the button panel to the center of the frame
-        add(buttonPanel, BorderLayout.CENTER);
+    }
+    
+    private void initializeLabel()
+    {
+        // Create the label with padding
+        JLabel instructionLabel = new JLabel("CHOOSE YOUR FINAL CASE", JLabel.CENTER);
+        instructionLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        instructionLabel.setForeground(Color.ORANGE); // Set text color to orange for visibility
+        instructionLabel.setBorder(new EmptyBorder(20, 0, 20, 0)); // Add padding
+        add(instructionLabel, BorderLayout.NORTH);
+    }
+    
+    @Override
+    public void initializeFrame()
+    {
+        setTitle("Final Round");
+        setSize(600, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(Color.BLACK);
+        setLayout(new BorderLayout());
+    }
+    
+    private void configureButton(JButton button, int money)
+    {
+        //initialize button of the final cases
+        button.setBackground(Color.ORANGE);
+        button.setForeground(Color.BLACK);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
+        button.setVerticalAlignment(SwingConstants.CENTER);
+        button.setPreferredSize(new Dimension(200, 100));
+        button.addActionListener(new CaseButtonListener(money));
     }
 
     private class CaseButtonListener implements ActionListener {

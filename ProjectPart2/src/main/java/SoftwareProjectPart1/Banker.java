@@ -18,6 +18,7 @@ public class Banker
     
     private void calculateOffer()
     {
+        //methods calcualtes offer based on the RMS formula of current cases
         long total = 0;
         long square = 0;
         

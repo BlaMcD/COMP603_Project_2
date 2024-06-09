@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements FrameInitializer{
     public JPanel chosenCasePanel;
     public JLabel chosenCaseLabel;
     private JLabel promptLabel;
@@ -33,18 +33,8 @@ public class GameFrame extends JFrame {
     }
 
     private void initialize() {
-        setTitle("DEAL OR NO DEAL");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 600);
-        setResizable(false);
-        setLayout(new BorderLayout());
-        getContentPane().setBackground(Color.BLACK);
-
-        // Title
-        JLabel titleLabel = new JLabel("DEAL OR NO DEAL", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
-        titleLabel.setForeground(Color.YELLOW);
-        add(titleLabel, BorderLayout.NORTH);
+        initializeFrame();
+        setTitle();
 
         // Money panel on the left
         moneyPanel = new MoneyPanel(currentGame.caseSet.moneyValues);
@@ -80,6 +70,26 @@ public class GameFrame extends JFrame {
 
         setVisible(true);
     }
+    
+    @Override
+    public void initializeFrame()
+    {
+        setTitle("DEAL OR NO DEAL");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(900, 600);
+        setResizable(false);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.BLACK);
+    }
+    
+    private void setTitle()
+    {
+        //Set the title label for the game frame
+        JLabel titleLabel = new JLabel("DEAL OR NO DEAL", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setForeground(Color.YELLOW);
+        add(titleLabel, BorderLayout.NORTH);
+    }
 
     public void setPrompt(String prompt) {
         promptLabel.setText(prompt);
@@ -92,7 +102,8 @@ public class GameFrame extends JFrame {
     public void updateMoneyLabel(int moneyValue) {
         moneyPanel.markOffMoney(moneyValue);
     }
-
+    
+    //below methods are for hanndling enabling/disabling of game frame buttons
     public void disableCaseButton(int index) {
         casePanel.disableButton(index);
     }
@@ -125,6 +136,7 @@ public class GameFrame extends JFrame {
                 return;
             }
             if (!currentGame.isDealing) {
+                //calls choose case which will handle the case chosing logic
                 JButton button = (JButton) e.getSource();
                 int caseIndex = Integer.parseInt(button.getText());
                 currentGame.caseChosen(caseIndex);
@@ -139,6 +151,7 @@ public class GameFrame extends JFrame {
                 JOptionPane.showMessageDialog(GameFrame.this, "Please log in first!");
                 return;
             }
+            //calls logic to handle accepting the deal
             int offer = bankerPanel.getCurrentOffer();
             currentGame.acceptDeal(offer);
         }
@@ -151,6 +164,7 @@ public class GameFrame extends JFrame {
                 JOptionPane.showMessageDialog(GameFrame.this, "Please log in first!");
                 return;
             }
+            //handles rejection logic of game frame
             currentGame.rejectDeal();
             currentGame.isDealing = false;
         }
@@ -161,6 +175,7 @@ public class GameFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
             SwingUtilities.invokeLater(() -> {
+                //restart the game by making a new game object
                 Game newGame = new Game(userDAO, scoresDAO);
                 GameFrame newGameFrame = new GameFrame(newGame, userDAO, scoresDAO, loginFrame);
                 newGame.setGameFrame(newGameFrame);
@@ -171,6 +186,7 @@ public class GameFrame extends JFrame {
 
     public void showLeaderboard() {
         SwingUtilities.invokeLater(() -> {
+            //logic for showing the leaderboard
             LeaderboardFrame leaderboardFrame = new LeaderboardFrame(scoresDAO);
             leaderboardFrame.setVisible(true);
         });
